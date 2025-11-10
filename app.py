@@ -10,8 +10,14 @@ from google import genai
 # Recommended: set these as environment variables before running:
 #   export GEMINI_API_KEY="..."
 #   export CALORIE_NINJAS_API_KEY="..."
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-CALORIE_NINJAS_API_KEY = os.environ.get("CALORIE_NINJAS_API_KEY")
+# GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+# CALORIE_NINJAS_API_KEY = os.environ.get("CALORIE_NINJAS_API_KEY")
+try:
+    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+    CALORIE_NINJAS_API_KEY = st.secrets["CALORIE_NINJAS_API_KEY"]
+except Exception as e:
+    st.error("⚠️ Missing API keys in Streamlit secrets. Please add them in `.streamlit/secrets.toml`.")
+    st.stop()
 
 if not GEMINI_API_KEY:
     st.error("GEMINI_API_KEY is not set in environment variables.")
