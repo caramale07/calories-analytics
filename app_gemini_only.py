@@ -49,7 +49,12 @@ class NutritionEstimate(BaseModel):
 
 # ---------- Gemini client ----------
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "YOUR_GEMINI_KEY_HERE")
+# Try to get the API key from Streamlit secrets
+try:
+    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+except Exception:
+    # Fallback to environment variable or None
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # Initialize client only if key is present (handled in main for UI feedback)
 if GEMINI_API_KEY and GEMINI_API_KEY != "YOUR_GEMINI_KEY_HERE":
@@ -120,8 +125,8 @@ def main():
 
     # Check API Key
     if not client:
-        st.error("🚨 `GEMINI_API_KEY` environment variable is missing or not set.")
-        st.info("Please set the environment variable and restart the app.")
+        st.error("🚨 `GEMINI_API_KEY` is missing.")
+        st.info("Please set it in `.streamlit/secrets.toml` or as an environment variable.")
         return
 
     # File Uploader
